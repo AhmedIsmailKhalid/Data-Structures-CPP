@@ -1,0 +1,401 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class node {
+private:
+	int data;
+	node *lc; // left child
+	node *rc; // right child
+
+public:
+	node()
+	{
+		data = 0;
+		lc = rc = NULL;
+	}
+
+	friend class tree;
+};
+
+class tree {
+private:
+	node *root;
+
+public:
+	tree()
+	{
+		root = NULL;
+	}
+
+	bool empty()
+	{
+		return (root == NULL);
+	}
+
+	void insert(int key) // every key is inserted as a leaf
+	{
+		node *ins = new node; // for insertion of new value
+		node *parent; // to find the parent of the value to be inserted
+		node *current; // to transverse through the tree
+		ins->data = key;
+		ins->lc = ins->rc = NULL;
+		parent = NULL;
+
+		if (empty())
+		{
+			root = ins;
+			cout << endl << ins->data << " Inserted  \n";
+		}
+		else
+		{
+			//Note: ALL insertions are as leaf nodes
+			current = root;
+			// Find the Node's parent
+			while (current)
+			{
+				parent = current;
+				if (ins->data > current->data)
+				{
+					current = current->rc;
+				}
+				else
+				{
+					current = current->lc;
+				}
+			}
+
+			if (ins->data < parent->data)
+			{
+				parent->lc = ins;
+			}
+			else
+			{
+				parent->rc = ins;
+			}
+		}
+	} // end of insert function
+
+	void search(int key)
+	{
+		node *current = root;
+		node *parent;
+		bool found = false;
+		if (empty())
+		{
+			cout << "Tree Is Empty : \n";
+			return;
+		}
+		while (current != NULL) // while(!empty())
+		{
+			if (current->data == key)
+			{
+				found = true;
+				cout << endl << current->data << " Found \n";
+				break;
+			}
+			else
+			{
+				parent = current;
+				if (current->data < key)
+				{
+					current = current->rc;
+				}
+				else
+				{
+					current = current->lc;
+				}
+			}
+		}
+		if (!found)
+		{
+			cout << key << "  Not Found \n";
+			return;
+		}
+	}
+
+	void del(int key)
+	{
+		/* There Are 3 Cases We Have to Deal With For Deletion Of Node :
+		Case 1) Deleting A Leaf Node
+		Case 2) Deleting A Node With 1 Child (Either Left Child Or Right Child)
+		Case 3) Deletong A Node With 2 Children
+		Since Compiler Giving Error While Calling The Search Function Hence Copying The Code In Delete Function*/
+		bool found = false;
+		if (empty())
+		{
+			cout << "Tree Is Empty : \n";
+			return;
+		} // if
+		node *current;
+		node *parent;
+		current = root;
+		while (current != NULL) // while(!empty())
+		{
+			if (current->data == key)
+			{
+				found = true;
+				cout << endl << current->data << " Deleted \n";
+				break;
+			} // while if
+			else
+			{
+				parent = current;
+				if (current->data < key)
+				{
+					current = current->rc;
+				} // else if
+				else
+				{
+					current = current->lc;
+				} // else else
+			} // else
+		} // while
+		if (!found)
+		{
+			cout << key << "  Not Found \n";
+			return;
+		}
+
+		//==============================================================================================//
+		//==============================================================================================//
+
+		//Case 2) Deleting A Node With 1 Child (Either Left Child Or Right Child)
+		if((current->lc == NULL && current->rc != NULL)|| (current->lc != NULL && current->rc == NULL))
+		{
+			if(current->lc == NULL && current->rc != NULL) // has only right child
+			{
+				if(parent->lc == current)
+				{
+					parent->lc = current->rc;
+					cout << endl << parent->lc << "  Deleted  \n";
+					delete current;
+				}
+				else
+				{
+					parent->rc = current->rc;
+					cout << endl << parent->rc << "  Deleted  \n";
+					delete current;
+				}
+			}
+			else // has only left child
+				{
+					if(parent->lc == current)
+					{
+						parent->lc = current->lc;
+						cout << endl << parent->lc << "  Deleted  \n";
+						delete current;
+					}
+					else
+					{
+						parent->rc = current->lc;
+						cout << endl << parent->rc << "  Deleted  \n";
+						delete current;
+					}
+				}
+			return;
+		}
+
+		//==============================================================================================//
+		//==============================================================================================//
+		// Case 1) Deleting A Leaf Node
+		if( current->lc == NULL && current->rc == NULL)
+		{
+			if(parent->lc == current)
+			{
+				parent->lc = NULL;
+			}
+			else
+			{
+				parent->rc = NULL;
+			}
+			cout << current << "  Deleted  \n";
+			delete current;
+			return;
+		}
+		//==============================================================================================//
+		//==============================================================================================//
+
+		// Case 3) Deletong A Node With 2 Children => We Will Replace Node With Smallest Value In Right Sub Tree
+		// replace node with smallest value in rc subtree
+		if (current->lc != NULL && current->rc != NULL)
+		{
+			node* svr; // svr = smallest value right hand side
+			svr = current->rc;
+			if((svr->lc == NULL) && (svr->rc == NULL))
+			{
+				current = svr;
+				delete svr;
+				current->rc = NULL;
+			}
+        else // if right child is also a parent with 2 children transverse ITS left child to find smallest
+        {
+        	if((current->rc)->lc != NULL)
+        	{
+        		node* lcurrent;
+                node* lcurrentp;
+                lcurrentp = current->rc;
+                lcurrent = (current->rc)->lc;
+                while(lcurrent->lc != NULL)
+                {
+                   lcurrentp = lcurrent;
+                   lcurrent = lcurrent->lc;
+                }
+                current->data = lcurrent->data;
+                cout << endl << current->data << "  Deleted  \n";
+                delete lcurrent;
+                lcurrentp->lc = NULL;
+           }
+           else
+           {
+               node *tmp;
+               tmp = current->rc;
+               current->data = tmp->data;
+               current->rc = tmp->rc;
+               cout << cout << current->rc << "  Deleted  \n";
+               delete tmp;
+           }
+
+        }
+		 return;
+    }
+}
+
+	void preorder(node *pre)
+		{
+			if (pre!=NULL)
+			{
+				cout << " " << pre->data << " ";
+				if (pre->lc)
+				{
+					preorder(pre->lc);
+				}
+				if (pre->rc)
+				{
+					preorder(pre->rc);
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+	void printpreorder()
+	{
+		preorder(root);
+	}
+
+	void postorder(node *post)
+	{
+		if (root!=NULL)
+		{
+			if(post->lc)
+			{
+				postorder(post->lc);
+			}
+			if(post->rc)
+			{
+				postorder(post->rc);
+			}
+				cout << " " << post->data << " ";
+			}
+			else
+			{
+				return;
+			}
+	}
+	void printpostorder()
+	{
+		postorder(root);
+	}
+
+	void inorder(node *in)
+	{
+		if (in!=NULL)
+		{
+			if (in->lc)
+			{
+				inorder(in->lc);
+			}
+				cout << " " << in->data << " ";
+			if (in->rc)
+			{
+				inorder(in->rc);
+			}
+			}
+			else
+			{
+				return;
+			}
+	}
+	void printinorder()
+	{
+		inorder(root);
+	}
+};
+
+
+
+int main() {
+	tree t;
+	int v;
+	int c;
+	while (1)
+	{
+		cout << endl;
+		cout << "     MENU :  \n 1) INSERT : \n 2) SEARCH : \n 3) DELETE : \n 4) PRE-ORDER TRANSVERSAL : \n "
+				"5) POST-ORDER TRANSVERSAL : \n 6) IN-ORDER TRANSVERSAL : \n 7) EXIT : \n \n";
+		cout << "Enter Your Desired Action : \n";
+		cin >> c;
+		cout << endl;
+
+		switch (c)
+		{
+			case 1:
+				cout << "Enter Value To Insert : \n";
+				cin >> v;
+				t.insert(v);
+				break;
+
+			case 2:
+				cout << "Enter Value To Search : \n";
+				cin >> v;
+				t.search(v);
+				break;
+
+			case 3:
+				cout << "Enter Value To Delete : \n";
+				cin >> v;
+				t.del(v);
+				break;
+
+			case 4:
+				cout << "Pre-Order Transversal : \n";
+				t.printpreorder();
+				cout << endl;
+				break;
+
+			case 5 :
+				cout << "Post-Order Transversal : \n";
+				t.printpostorder();
+				cout << endl;
+				break;
+
+			case 6 :
+				cout << "In-Order Transversal : \n";
+				t.printinorder();
+				cout << endl;
+				break;
+
+			case 7 :
+				cout << "Exiting Program : \n Thank You :)";
+				return 0;
+				break;
+
+			default:
+				cout << "Please Enter Correct Choice : \n";
+				break;
+		}
+	}
+	return 0;
+}
