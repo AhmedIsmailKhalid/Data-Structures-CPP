@@ -1,0 +1,45 @@
+#include <iostream>
+#include<deque>
+using namespace std;
+template <class T>
+class Node                              
+{
+private:
+
+	T element;
+	Node<T> *next_node;
+
+public:
+	Node<T>(T = 0, Node * = NULL);
+	T retrive() const;
+	Node<T> *next() const;
+};
+
+
+int main() {
+	deque<int> s;
+	s.push_front(10);
+	cout << "10 Pushed \n";
+	s.push_front(20);
+	cout << "20 Pushed \n";
+	s.push_front(30);
+	cout << "30 Pushed \n";
+	s.push_front(40);
+	cout << "40 Pushed \n \n";
+
+	cout << "Using FIFO Structure \n \n";
+	
+	s.pop_front();
+	cout << "10 Popped \n";
+	s.pop_front();
+	cout << "20 Popped \n";
+	s.pop_front();
+	cout << "30 Popped \n";
+	s.pop_front();
+	cout << "40 Popped \n \n";
+	
+
+	cout << "Queue is empty : " << s.empty() << endl << endl;
+	
+	return 0;
+}
