@@ -1,0 +1,100 @@
+#include<iostream>
+using namespace std;
+
+class stack
+{
+private:
+    int arr[10];
+    int top;
+
+public:
+    stack()
+    {
+        top = -1;
+    }
+    
+    void push (int x)
+        {
+            if(top >  4)
+            {
+                cout <<"Stack Overflow \n";
+                           return;
+            }
+            arr[++top] = x;
+            cout << endl << x << "\t Inserted \n";
+        }
+    
+    void pop ()
+    {
+        if(top <0)
+        {
+            cout <<"stack under flow";
+            return;
+        }
+        cout <<"deleted" << arr[top--];
+    }
+    
+    void show ()
+    {
+        if(top<0)
+        {
+            cout <<" stack empty";
+            return;
+        }
+        for(int i=top;i>=0;i--)
+        {
+            cout  << arr[i] <<"  ";
+        }
+        cout << endl;
+    }
+};
+
+int main () {
+    stack s;
+    int v,choice;
+    while (!0)
+	{
+		cout << endl;
+		cout << "   Menu : " << endl << " 1. Push : \n 2. Pop : \n 3. Display : \n 4. Exit : " << endl <<endl;
+		cout << "Enter your desired action : " << endl;
+		cin >> choice;
+		cout << endl;
+
+		switch (choice)
+		{
+			case 1:
+                cout << "Enter value to insert : \n";
+                cin >> v;
+				s.push(v);
+				break;
+
+				cout << endl;
+
+			case 2:
+				s.pop();
+				cout << endl;
+				break;
+
+				cout << endl;
+
+			case 3:
+				s.show();
+				break;
+
+				cout << endl;
+
+			case 4:
+				return 0;
+				break;
+
+				cout << endl;
+
+			default:
+				cout << "Please enter correct choice :" << endl;
+				break;
+
+				cout << endl;
+            }
+    }
+    return 0;
+}
