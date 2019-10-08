@@ -1,0 +1,186 @@
+#include <iostream>
+using namespace std;
+
+class node {
+      public :
+             int data;
+             node *nextnode;
+             node *prevnode;
+             
+             node() {
+                  data = 0;
+                  nextnode = NULL;
+                  prevnode = NULL;
+                  }
+             };
+             
+class list {
+      private :
+             node *head;
+             node *tail;
+             
+      public : 
+             list() {
+                  head = NULL;
+                  tail = NULL;
+                  }
+                  
+             bool empty()
+             {
+                 tail = NULL;
+                 return (head==NULL);
+             }
+             
+             void push_front()
+             {
+                 node *ptr;
+                 ptr = new node;
+                 cout << "Enter value to insert : \n";
+                 int v;
+                 cin >> v;
+                 ptr->data = v;
+                 ptr->nextnode = NULL;
+                 ptr->prevnode = NULL;
+                 if (head!=NULL)
+                 {
+                     ptr->nextnode = head;
+                     ptr->prevnode = NULL;
+                 }
+                 head = ptr;
+                 cout << "\n \t" << ptr->data << "\t Pushed Successfully \n";
+             }
+             
+             void push_back ()
+             {
+                node *ptr;
+                ptr = new node;
+                node *last;
+                last = head;
+                cout << "Enter value to insert : \n";
+                int v;
+                cin >> v;
+                ptr->nextnode = NULL;
+                if (empty())
+                {
+                    ptr->prevnode = NULL;
+                    head = ptr;   
+                }
+                while (last!=NULL)
+                {
+                    last = last->nextnode;
+                    //last->nextnode = ptr; // remove if removing comment tag on the below comment tagged lines
+                    //ptr->prevnode = last; // remove if removing comment tag on the below comment tagged lines
+                }
+                last->nextnode = ptr;
+                ptr->prevnode = last;
+                cout << "\n \t" << ptr->data << "\t Pushed Successfully \n";
+             }
+                 
+             
+             void pop_front()
+             {
+                 node *temp;
+                 if (empty())
+                 {
+                     cout << "List Is Empty \n :";
+                 }
+                 temp = head;
+                 head = head->nextnode;
+                 cout << "\t" << temp->data << " \t Popped From Front Successfully \n";
+                 delete temp;
+                 }
+                 
+             /*void pop_back()
+             {
+                 node *temp;
+                 if (empty())
+                 {
+                     cout << "List Is Empty \n";
+                 }
+                 temp = head;
+                 while (temp!=NULL)
+                 {
+                     temp = temp->nextnode;
+                     tail = temp;
+                 }
+                 --temp;
+                 cout << "\t";
+                 delete temp;
+             }*/
+             
+             /*void append()
+             {
+                  code here
+             }*/
+             
+             /*void deletenode()
+             {
+                  code here
+             }*/
+                              
+             void count()
+             {
+                  node *count;
+                  int length;
+                  count = head;
+                  while (count!=NULL)
+                  {
+                      length++;
+                      count = count->nextnode;
+                  }
+                  cout << "Number Of Nodes In The List Is : " << length << endl;
+                  }
+                  
+             void display()
+             {
+                  node *dp;
+                  dp = head;
+                  while (dp!=NULL)
+                  {
+                      cout << dp->data << "<====>";
+                      dp = dp->nextnode;
+                  }
+                  cout << "NULL \n";
+                  }
+             };
+             
+             int main() {
+                 list l;
+                 int c;
+                 while (1)
+                 {
+                     cout << "\n \t MENU : \n 1) PUSH : \n 2) POP : \n 3) DISPLAY : \n 4) SIZE : \n 5) EXIT : \n 6) PB :";
+                     cout << "\n \n Enter desired action : \n";
+                     cin >> c;
+                     switch(c)
+                     {
+                              case 1 :
+                                   l.push_front();
+                                   break;
+                                   
+                              case 2 :
+                                   l.pop_front();
+                                   break;
+                                   
+                              case 3 :
+                                   l.display();
+                                   break;
+                                   
+                              case 4 :
+                                   l.count();
+                                   break;
+                                   
+                              case 6 :
+                                   l.push_back();
+                                   break;
+                                   
+                              case 5 :
+                                   return 0;
+                                   break;
+                                   
+                              default :
+                                      cout << "Enter valid choice : \n";
+                     }
+                 }
+                 return 0;
+             }
