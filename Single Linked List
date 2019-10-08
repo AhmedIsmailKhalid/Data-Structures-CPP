@@ -1,0 +1,131 @@
+#include <iostream>
+using namespace std;
+
+class node {
+private :
+	int data;
+	node *nextnode;
+public :
+	node() {
+		data=0;
+		nextnode=NULL;
+	}
+friend class list;
+};
+
+
+class list {
+private :
+	node *head;
+	node *tail;
+
+public :
+	list() {
+		head = NULL;
+		tail = NULL;
+	}
+	
+	bool empty() {
+         return (head==NULL);
+         }
+         
+	void push_front() {
+		node *ptr     ; // temp pointer
+		ptr = new node; // dynamically allocating space for ptr
+		cout << "Enter value to insert : \n";
+		int v;
+		cin >> v;
+		ptr->data = v; // data for the new node
+		ptr->nextnode = NULL; // new node next pointing to nothing
+		if (head!=NULL) // if head linked to something
+		{
+             ptr->nextnode = head; // ??;
+        }
+        head = ptr; // ptr now pointing to head
+		cout << "\n \t" << ptr->data << "\t Pushed Successfully \n";
+	}
+	
+	void pop_front() {
+         node *temp; // temp pointer 
+         if (empty())
+         {
+             cout << "Empty List : \n";
+         }
+         temp = head; // temp pointing to head that is the start of the linked list
+         head=head->nextnode; // head pointing to the next node, that is the second node in the linked list
+         cout << "\t" << temp->data << "\t Popped Successfully \n";
+         delete temp; // after popped to screen, display the temp pointer and its members, deleting the temp pointer and the head pointing
+                      // to the next node in the list
+         }
+         
+    //void push_back() { // for some reason just wont work even though the syntax is correct
+         
+    void count() {
+             node *count; // pointer to transverse through the linked list
+             int length; // length of the node
+             count = head; // transversing node at the start of the list
+             while (count!=NULL)
+             {
+                 length++; // increment the lenght
+                 count = count->nextnode; // transverse node pointing to the next node in the linked list (TRANSVERSING)
+             }
+             cout << "Number Of Nodes In The List Is : " << length << endl;
+             }
+             
+	void display() {
+		node *dp; // pointer for displaying the 
+		dp = head; // pointer to the start of the linked list
+		while (dp!=NULL)
+		{
+			cout << dp->data << " -> ";
+			dp = dp->nextnode; // point to the next node
+		}
+		cout << "NULL \n";
+	}
+};
+
+int main() {
+    list l;
+    int c;
+    while(1) // 1push, 2pop, 3disp, 4size, 5 exit;
+    {
+        cout << " \n MENU \n 1) PUSH : \n 2) POP : \n 3) DISPLAY : \n 4) SIZE : \n 5) EXIT : \n \n";
+        cout << "Enter desired action : \n";
+        cin >> c;
+        
+        switch (c)
+        {
+            case 1 :
+                 l.push_front();
+                 break;
+                 
+            case 2 :
+                l.pop_front();
+                if (l.empty())
+                {
+                    cout << " \n Empty list \t";
+                    system("pause"); // if not added and all values popped then program would crash instead of continuing to work
+                    // still have to figure a way to make sure program doesnt crash if popped an empty list
+                }
+                break;
+                
+            case 3 :
+                 l.display();
+                 break;
+                 
+            case 4 :
+                 l.count();
+                 break;
+                 
+            case 5 :
+                 return 0;
+                 break;
+                 
+            default :
+                    cout << "Enter correct choice \n";
+                    break;
+        }
+    }
+    return 0;
+}
+// 128 lines and options for actions
